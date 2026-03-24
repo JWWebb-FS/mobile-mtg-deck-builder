@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://mtg-deck-builder-psi.vercel.app";
+const BASE_URL = "https://mtg-deck-builder-o20y.onrender.com";
 
 const api = axios.create({
   baseURL: BASE_URL,
