@@ -7,10 +7,10 @@ const api = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-// Correct api endpoints for CRUD operations on decks
-export const getDecks = () => api.get("/api/cards");
-export const createDeck = (data) => api.post("/api/cards", data);
-export const updateDeck = (id, data) => api.put(`/api/cards/${id}`, data);
-export const deleteDeck = (id) => api.delete(`/api/cards/${id}`);
+// Corrected API endpoints to use the new /api/decks routes
+export const getDecks = () => api.get("/api/decks");
+export const createDeck = (data) => api.post("/api/decks", data);
+export const updateDeck = (id, data) => api.put(`/api/decks/${id}`, data);
+export const deleteDeck = (id) => api.delete(`/api/decks/${id}`);
 
 export default api;
