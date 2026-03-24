@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "MTG Deck Vault",
+    "slug": "mobile-mtg-deck-builder",
+    "version": "1.0.0",
+    "platforms": ["ios", "android", "web"],
+    "assetBundlePatterns": ["**/*"],
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
