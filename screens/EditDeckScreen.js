@@ -25,14 +25,19 @@ const EditDeckScreen = ({ route, navigation }) => {
   };
 
   const handleDelete = () => {
-    Alert.alert("Delete Deck", "Are you sure you want to remove this deck?", [
+    // Add this log to see what is actually inside the deck object
+    console.log("Deck Object Contents:", deck);
+
+    Alert.alert("Delete Deck", "Are you sure?", [
       { text: "Cancel", style: "cancel" },
       {
         text: "Delete",
         style: "destructive",
         onPress: async () => {
           try {
-            await deleteDeck(deck._id); // Triggering DELETE
+            // Verify if it is deck._id or just deck.id
+            console.log("Sending ID to API:", deck._id);
+            await deleteDeck(deck._id);
             navigation.goBack();
           } catch (error) {
             console.error("Delete failed:", error);
