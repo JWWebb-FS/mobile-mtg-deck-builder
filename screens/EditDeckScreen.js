@@ -6,18 +6,23 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Platform, // Required for the Web Fallback
 } from "react-native";
-import { updateDeck, deleteDeck } from "../services/api"; // Importing PUT and DELETE
+import { updateDeck, deleteDeck } from "../services/api";
 
 const EditDeckScreen = ({ route, navigation }) => {
-  const { deck } = route.params; // Get the deck data passed from HomeScreen
+  const { deck } = route.params;
   const [name, setName] = useState(deck.name);
   const [colors, setColors] = useState(deck.colors);
 
   const handleUpdate = async () => {
     try {
-      await updateDeck(deck._id, { name, colors }); // Triggering PUT
-      Alert.alert("Success", "Deck updated in the Vault!");
+      await updateDeck(deck._id, { name, colors });
+      if (Platform.OS === "web") {
+        alert("Deck updated in the Vault!"); // Web-safe alert
+      } else {
+        Alert.alert("Success", "Deck updated in the Vault!");
+      }
       navigation.goBack();
     } catch (error) {
       console.error("Update failed:", error);
@@ -25,26 +30,30 @@ const EditDeckScreen = ({ route, navigation }) => {
   };
 
   const handleDelete = () => {
-    // Add this log to see what is actually inside the deck object
     console.log("Deck Object Contents:", deck);
 
-    Alert.alert("Delete Deck", "Are you sure?", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: async () => {
-          try {
-            // Verify if it is deck._id or just deck.id
-            console.log("Sending ID to API:", deck._id);
-            await deleteDeck(deck._id);
-            navigation.goBack();
-          } catch (error) {
-            console.error("Delete failed:", error);
-          }
-        },
-      },
-    ]);
+    // Helper function to execute the actual DELETE request
+    const performDelete = async () => {
+      try {
+        console.log("Sending ID to API:", deck._id); // This confirms it's firing
+        await deleteDeck(deck._id);
+        navigation.goBack();
+      } catch (error) {
+        console.error("Delete failed:", error);
+      }
+    };
+
+    // Use window.confirm for web and Alert.alert for native mobile
+    if (Platform.OS === "web") {
+      if (window.confirm("Are you sure you want to delete this deck?")) {
+        performDelete();
+      }
+    } else {
+      Alert.alert("Delete Deck", "Are you sure?", [
+        { text: "Cancel", style: "cancel" },
+        { text: "Delete", style: "destructive", onPress: performDelete },
+      ]);
+    }
   };
 
   return (
